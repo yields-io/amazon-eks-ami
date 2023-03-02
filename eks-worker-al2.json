@@ -2,7 +2,7 @@
   "_comment": "All template variables are enumerated here; and most variables have a default value defined in eks-worker-al2-variables.json",
   "variables": {
     "additional_yum_repos": null,
-    "ami_component_description": null,    
+    "ami_component_description": null,
     "ami_description": null,
     "ami_name": null,
     "ami_regions": null,
@@ -40,7 +40,8 @@
     "ssh_username": null,
     "subnet_id": null,
     "temporary_security_group_source_cidrs": null,
-    "volume_type": null
+    "volume_type": null,
+    "proxy": null
   },
   "builders": [
     {
@@ -209,6 +210,12 @@
       "direction": "download",
       "source": "/tmp/version-info.json",
       "destination": "{{ user `ami_name` }}-version-info.json"
+    },
+    {
+      "type": "shell",
+      "remote_folder": "{{ user `remote_folder`}}",
+      "script": "{{template_dir}}/scripts/proxy.sh",
+      "execute_command": "sudo -S -E bash '{{.Path}}' '{{user `proxy`}}'"
     }
   ],
   "post-processors": [
